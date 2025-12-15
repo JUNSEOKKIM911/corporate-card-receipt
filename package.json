@@ -1,0 +1,23 @@
+{
+  "name": "corporate-card-receipt-automation",
+  "version": "1.0.0",
+  "description": "법인카드 영수증 자동화 프로그램 - OCR과 PDF 생성을 통한 영수증 처리 자동화",
+  "main": "index.html",
+  "scripts": {
+    "start": "live-server ."
+  },
+  "keywords": [
+    "receipt",
+    "ocr",
+    "pdf",
+    "automation",
+    "corporate-card"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "note": "이 프로젝트는 CDN을 통해 라이브러리를 로드하므로 별도의 npm install이 필요하지 않습니다."
+}
