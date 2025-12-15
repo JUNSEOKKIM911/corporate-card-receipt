@@ -1,0 +1,85 @@
+/* PDF 스타일 - A4 최적화 (잘림 방지) */
+.pdf-page {
+    background: white;
+    padding: 15px;
+    width: 210mm;
+    height: 297mm;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.pdf-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 15px 0;
+    padding: 8px 0;
+    color: #000;
+    border: 3px solid #000;
+    border-left: none;
+    border-right: none;
+    flex-shrink: 0;
+}
+
+.pdf-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    flex: 1;
+    align-items: start;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.pdf-receipt {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    border: 2px solid #000;
+    padding: 8px;
+    height: 100%;
+    overflow: hidden;
+}
+
+.pdf-receipt img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.pdf-form {
+    height: 100%;
+    overflow: hidden;
+}
+
+.pdf-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    height: fit-content;
+}
+
+.pdf-table th,
+.pdf-table td {
+    border: 2px solid #000;
+    padding: 6px 5px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.pdf-table th {
+    background: #f5f5f5;
+    font-weight: 600;
+    width: 85px;
+    white-space: nowrap;
+    font-size: 11px;
+}
+
+.pdf-table td {
+    background: white;
+    word-wrap: break-word;
+    font-size: 11px;
+    line-height: 1.3;
+}

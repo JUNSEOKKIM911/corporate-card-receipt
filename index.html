@@ -12,7 +12,7 @@
     <div class="container">
         <header>
             <h1>법인카드 영수증 자동화</h1>
-            <p class="subtitle">종이 영수증을 업로드하고 자동으로 양식을 작성하세요</p>
+            <p class="subtitle">종이 영수증을 업로드하고 양식을 작성하세요</p>
         </header>
 
         <div class="main-content">
@@ -32,11 +32,6 @@
                     <img id="receiptPreview" alt="영수증 미리보기">
                     <button class="change-btn" onclick="changeImage()">다른 이미지 선택</button>
                 </div>
-
-                <div class="ocr-status" id="ocrStatus" style="display: none;">
-                    <div class="loading-spinner"></div>
-                    <p>영수증을 분석하는 중...</p>
-                </div>
             </section>
 
             <!-- 양식 섹션 -->
@@ -51,28 +46,14 @@
                         </div>
 
                         <div class="form-group">
-                            <label>사용일자 <span class="auto-label">자동입력</span></label>
+                            <label>사용일자</label>
                             <input type="date" id="usageDate" required>
                         </div>
 
                         <div class="form-group full-width">
-                            <label>예산과목</label>
+                            <label>예산과목/세목/사업</label>
                             <select id="budgetCategory" required>
-                                <option value="">예산과목 선택</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label>세목</label>
-                            <select id="budgetDetail" required disabled>
-                                <option value="">세목 선택</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label>사업(세부사업)</label>
-                            <select id="budgetProject" required disabled>
-                                <option value="">사업(세부사업) 선택</option>
+                                <option value="">예산과목/세목/사업 선택</option>
                             </select>
                         </div>
 
@@ -97,7 +78,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label>품의금액 <span class="auto-label">자동입력</span></label>
+                            <label>품의금액</label>
                             <input type="text" id="approvalAmount" placeholder="0원" required>
                         </div>
                     </div>
@@ -118,7 +99,7 @@
     <div id="pdfContent" style="display: none;">
         <div class="pdf-page">
             <h1 class="pdf-title">법인카드영수증</h1>
-            <div class="pdf-layout">
+            <div class="pdf-container">
                 <div class="pdf-receipt">
                     <img id="pdfReceiptImage" alt="영수증">
                 </div>
@@ -133,7 +114,7 @@
                             <td id="pdfUsageDate"></td>
                         </tr>
                         <tr>
-                            <th>예산과목/세목/사업</th>
+                            <th>예산과목</th>
                             <td id="pdfBudgetCategory"></td>
                         </tr>
                         <tr>
@@ -162,8 +143,7 @@
         </div>
     </div>
 
-    <!-- CDN 라이브러리 -->
-    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <!-- CDN 라이브러리 (OCR 제거) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
