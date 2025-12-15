@@ -239,7 +239,6 @@ header h1 {
     transition: var(--transition);
     background: white;
     min-height: 44px;
-    /* Better touch target for mobile */
 }
 
 .form-group input:focus,
@@ -264,6 +263,7 @@ header h1 {
     display: flex;
     gap: 1rem;
     margin-top: 2rem;
+    flex-wrap: wrap;
 }
 
 .btn-primary,
@@ -308,55 +308,91 @@ header h1 {
     font-size: 1.2rem;
 }
 
-/* PDF 스타일 */
+/* PDF 스타일 - 한 페이지에 딱 맞게 최적화 */
 .pdf-page {
     background: white;
-    padding: 40px;
+    padding: 10px;
     width: 210mm;
-    min-height: 297mm;
+    height: 297mm;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .pdf-title {
     text-align: center;
-    font-size: 32px;
-    margin-bottom: 30px;
-    color: #1e293b;
-    border-bottom: 3px solid #334155;
-    padding-bottom: 15px;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    padding: 6px 0;
+    color: #000;
+    border: 2px solid #000;
+    border-left: none;
+    border-right: none;
+    flex-shrink: 0;
 }
 
-.pdf-layout {
+.pdf-container {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 30px;
+    gap: 8px;
+    flex: 1;
+    align-items: start;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.pdf-receipt {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    border: 2px solid #000;
+    padding: 5px;
+    height: 100%;
+    overflow: hidden;
 }
 
 .pdf-receipt img {
-    width: 100%;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.pdf-form {
+    height: 100%;
+    overflow: hidden;
 }
 
 .pdf-table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 10px;
+    table-layout: fixed;
 }
 
 .pdf-table th,
 .pdf-table td {
-    border: 2px solid #334155;
-    padding: 12px;
+    border: 2px solid #000;
+    padding: 4px 3px;
     text-align: left;
+    vertical-align: top;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .pdf-table th {
-    background: #f1f5f9;
+    background: #f5f5f5;
     font-weight: 600;
-    width: 120px;
+    width: 65px;
+    white-space: nowrap;
+    font-size: 9px;
 }
 
 .pdf-table td {
     background: white;
+    font-size: 9px;
+    line-height: 1.2;
 }
 
 /* 애니메이션 */
@@ -495,7 +531,7 @@ header h1 {
         padding: 0.875rem 2rem;
     }
 
-    .pdf-layout {
+    .pdf-container {
         grid-template-columns: 1fr;
     }
 }
