@@ -309,17 +309,42 @@ async function downloadPDF() {
     // PDF 콘텐츠 준비
     preparePDFContent();
 
-    // PDF 생성
-    const pdfContent = document.getElementById('pdfContent');
-    pdfContent.style.display = 'block';
+    // 임시 컨테이너 생성 (화면에 보이지만 가려지게)
+    // 모바일에서도 A4 크기를 강제로 확보하기 위해 body에 직접 추가
+    const tempContainer = document.createElement('div');
+    tempContainer.style.position = 'absolute';
+    tempContainer.style.top = '0';
+    tempContainer.style.left = '-10000px'; // 화면 밖으로 이동
+    tempContainer.style.width = '794px'; // A4 width @ 96dpi (210mm)
+    tempContainer.style.height = '1123px'; // A4 height @ 96dpi (297mm)
+    tempContainer.style.background = 'white';
+    tempContainer.style.zIndex = '-9999';
+
+    // PDF 페이지 복사
+    const originalPage = document.querySelector('.pdf-page');
+    const clonedPage = originalPage.cloneNode(true);
+
+    // 복사된 페이지의 스타일 강제 지정 (반응형 무시)
+    clonedPage.style.width = '100%';
+    clonedPage.style.height = '100%';
+    clonedPage.style.margin = '0';
+    clonedPage.style.padding = '0';
+    clonedPage.style.border = '2px solid #000';
+
+    tempContainer.appendChild(clonedPage);
+    document.body.appendChild(tempContainer);
 
     try {
-        // A4 비율에 맞게 캔버스 크기 설정
-        const canvas = await html2canvas(pdfContent, {
-            scale: 2,
+        // html2canvas로 캡처
+        const canvas = await html2canvas(clonedPage, {
+            scale: 2, // 고해상도
             useCORS: true,
             logging: false,
-            backgroundColor: '#ffffff'
+            backgroundColor: '#ffffff',
+            width: 794,
+            height: 1123,
+            windowWidth: 1920, // 데스크탑 환경 시뮬레이션
+            windowHeight: 1080
         });
 
         const imgData = canvas.toDataURL('image/png');
@@ -332,29 +357,13 @@ async function downloadPDF() {
             format: 'a4'
         });
 
-        const pageWidth = 210;  // A4 width in mm
-        const pageHeight = 297; // A4 height in mm
+        // 이미지를 페이지에 꽉 차게 삽입
+        pdf.addImage(imgData, 'PNG', 0, 0, 210, 297);
 
-        // 캔버스 비율계산하여 A4에 맞춤
-        const imgWidth = pageWidth;
-        const imgHeight = (canvas.height * pageWidth) / canvas.width;
-
-        // 페이지에 맞게 스케일 조정
-        if (imgHeight > pageHeight) {
-            const scale = pageHeight / imgHeight;
-            const scaledWidth = imgWidth * scale;
-            const scaledHeight = pageHeight;
-            const xOffset = (pageWidth - scaledWidth) / 2;
-            pdf.addImage(imgData, 'PNG', xOffset, 0, scaledWidth, scaledHeight);
-        } else {
-            const yOffset = (pageHeight - imgHeight) / 2;
-            pdf.addImage(imgData, 'PNG', 0, yOffset, imgWidth, imgHeight);
-        }
-
-        // 파일명 생성 (날짜_사용자명)
-        const usageDate = document.getElementById('usageDate').value.replace(/-/g, '');
-        const userName = document.getElementById('userName').value;
-        const filename = `법인카드영수증_${usageDate}_${userName}.pdf`;
+        // 파일명 생성 (법인카드영수증_YY.MM.DD.pdf)
+        const dateStr = document.getElementById('usageDate').value; // YYYY-MM-DD
+        const formattedDate = dateStr.substring(2).replace(/-/g, '.'); // YY.MM.DD
+        const filename = `법인카드영수증_${formattedDate}.pdf`;
 
         pdf.save(filename);
 
@@ -363,7 +372,9 @@ async function downloadPDF() {
         console.error('PDF 생성 에러:', error);
         showNotification('PDF 생성 중 오류가 발생했습니다.', 'error');
     } finally {
-        pdfContent.style.display = 'none';
+        // 임시 컨테이너 제거
+        document.body.removeChild(tempContainer);
+        document.getElementById('pdfContent').style.display = 'none';
     }
 }
 
@@ -395,23 +406,47 @@ async function downloadImage() {
     // PDF 콘텐츠 준비
     preparePDFContent();
 
-    // 이미지 생성
-    const pdfContent = document.getElementById('pdfContent');
-    pdfContent.style.display = 'block';
+    // 임시 컨테이너 생성
+    const tempContainer = document.createElement('div');
+    tempContainer.style.position = 'absolute';
+    tempContainer.style.top = '0';
+    tempContainer.style.left = '-10000px';
+    tempContainer.style.width = '794px';
+    tempContainer.style.height = '1123px';
+    tempContainer.style.background = 'white';
+    tempContainer.style.zIndex = '-9999';
+
+    // PDF 페이지 복사
+    const originalPage = document.querySelector('.pdf-page');
+    const clonedPage = originalPage.cloneNode(true);
+
+    // 복사된 페이지의 스타일 강제 지정
+    clonedPage.style.width = '100%';
+    clonedPage.style.height = '100%';
+    clonedPage.style.margin = '0';
+    clonedPage.style.padding = '0';
+    clonedPage.style.border = '2px solid #000';
+
+    tempContainer.appendChild(clonedPage);
+    document.body.appendChild(tempContainer);
 
     try {
-        const canvas = await html2canvas(pdfContent, {
+        const canvas = await html2canvas(clonedPage, {
             scale: 2,
             useCORS: true,
             logging: false,
-            backgroundColor: '#ffffff'
+            backgroundColor: '#ffffff',
+            width: 794,
+            height: 1123,
+            windowWidth: 1920,
+            windowHeight: 1080
         });
 
         // Canvas를 Blob으로 변환
         canvas.toBlob(function (blob) {
-            const usageDate = document.getElementById('usageDate').value.replace(/-/g, '');
-            const userName = document.getElementById('userName').value;
-            const filename = `법인카드영수증_${usageDate}_${userName}.png`;
+            const dateStr = document.getElementById('usageDate').value;
+            const formattedDate = dateStr.substring(2).replace(/-/g, '.');
+            const filename = `법인카드영수증_${formattedDate}.png`;
 
             // 다운로드 링크 생성
             const url = URL.createObjectURL(blob);
@@ -429,7 +464,8 @@ async function downloadImage() {
         console.error('이미지 생성 에러:', error);
         showNotification('이미지 생성 중 오류가 발생했습니다.', 'error');
     } finally {
-        pdfContent.style.display = 'none';
+        document.body.removeChild(tempContainer);
+        document.getElementById('pdfContent').style.display = 'none';
     }
 }
 
